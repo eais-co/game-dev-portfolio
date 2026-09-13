@@ -1,0 +1,99 @@
+/* =========================================================
+   animations.css — page load sequence + scroll reveals
+   ========================================================= */
+
+/* ---------- scroll reveal (driven by IntersectionObserver, js/animations.js) ---------- */
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.7s var(--ease), transform 0.7s var(--ease);
+}
+[data-reveal].is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+[data-reveal-line] {
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.8s var(--ease);
+}
+[data-reveal-line].is-visible {
+  transform: scaleX(1);
+}
+
+/* stagger children of a revealed group */
+[data-reveal-group] [data-reveal-item] {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.6s var(--ease), transform 0.6s var(--ease);
+}
+[data-reveal-group].is-visible [data-reveal-item] {
+  opacity: 1;
+  transform: translateY(0);
+}
+[data-reveal-group].is-visible [data-reveal-item]:nth-child(1) { transition-delay: 0.02s; }
+[data-reveal-group].is-visible [data-reveal-item]:nth-child(2) { transition-delay: 0.08s; }
+[data-reveal-group].is-visible [data-reveal-item]:nth-child(3) { transition-delay: 0.14s; }
+[data-reveal-group].is-visible [data-reveal-item]:nth-child(4) { transition-delay: 0.2s; }
+[data-reveal-group].is-visible [data-reveal-item]:nth-child(5) { transition-delay: 0.26s; }
+[data-reveal-group].is-visible [data-reveal-item]:nth-child(6) { transition-delay: 0.32s; }
+
+/* ---------- page load intro sequence ---------- */
+.intro-line {
+  opacity: 0;
+  transform: scaleX(0);
+  transform-origin: left;
+}
+.hero-label,
+.hero-name,
+.hero-typewriter,
+.hero-statement,
+.hero-ctas,
+.hero-meta {
+  opacity: 0;
+  transform: translateY(16px);
+}
+
+.is-loaded .intro-line {
+  animation: introLine 0.6s var(--ease) forwards;
+}
+.is-loaded .hero-label { animation: introUp 0.6s var(--ease) 0.25s forwards; }
+.is-loaded .hero-name { animation: introUp 0.7s var(--ease) 0.35s forwards; }
+.is-loaded .hero-typewriter { animation: introUp 0.6s var(--ease) 0.55s forwards; }
+.is-loaded .hero-statement { animation: introUp 0.6s var(--ease) 0.7s forwards; }
+.is-loaded .hero-ctas { animation: introUp 0.6s var(--ease) 0.85s forwards; }
+.is-loaded .hero-meta { animation: introUp 0.6s var(--ease) 1s forwards; }
+.is-loaded .hero-char {
+  animation: introChar 1s var(--ease) 0.4s forwards;
+}
+.hero-char { opacity: 0; transform: translateY(30px) scale(0.96); }
+
+@keyframes introLine {
+  to { opacity: 1; transform: scaleX(1); }
+}
+@keyframes introUp {
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes introChar {
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* ---------- reduced motion: strip everything down to instant states ---------- */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+  [data-reveal],
+  [data-reveal-line],
+  [data-reveal-group] [data-reveal-item],
+  .hero-label, .hero-name, .hero-typewriter,
+  .hero-statement, .hero-ctas, .hero-meta, .hero-char,
+  .intro-line {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
